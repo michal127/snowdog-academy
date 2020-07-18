@@ -7,7 +7,7 @@ use DateTime;
 
 class Book
 {
-    private const DATETIME_FORMAT = 'Y-m-d H:i:s';
+    public const DATETIME_FORMAT = 'Y-m-d H:i:s';
 
     private int $id;
     private string $title;
@@ -47,5 +47,10 @@ class Book
         $dateTime->add(new DateInterval('P14D'));
 
         return $dateTime->format(self::DATETIME_FORMAT);
+    }
+
+    public function getBorrowedAt(): string
+    {
+        return $this->borrowed_at ?: '';
     }
 }

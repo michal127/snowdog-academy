@@ -75,8 +75,19 @@ class Books extends AdminAbstract
         header('Location: /admin');
     }
 
+    public function minDays($minDaysBorrowed): void
+    {
+        require __DIR__ . '/../../view/admin/books/list.phtml';
+    }
+
     private function getBooks(): array
     {
-        return $this->bookManager->getAllBooks();
+        return $this->bookManager->getAllBooksWithBorrowDate();
+    }
+
+    private function getBooksBorrowedMoreThanDays(int $days = 0): array
+    {
+        $date = date(Book::DATETIME_FORMAT, time() - ($days * 24 * 60 * 60));
+        return $this->bookManager->getBooksBorrowedToDate($date);
     }
 }

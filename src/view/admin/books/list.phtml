@@ -1,36 +1,67 @@
 <?php use Snowdog\Academy\Model\Book;
 
-require_once(__DIR__ . '/../../common/header.phtml'); ?>
+require_once(__DIR__ . '/../../common/header.phtml');
+
+if (!isset($minDaysBorrowed)) {
+    $minDaysBorrowed = 0;
+}
+?>
 
 <section id="add" class="padded">
     <a href="/admin/new_book" class="btn btn-primary">Add new book</a>
 </section>
 <section id="book-list" class="padded">
     <h3>Book list</h3>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>ISBN</th>
-                <th>Borrowed</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($this->getBooks() as $book): /** @var Book $book */?>
-            <tr>
-                <td><?= $book->getId()?></td>
-                <td><?= $book->getTitle()?></td>
-                <td><?= $book->getAuthor()?></td>
-                <td><?= $book->getIsbn()?></td>
-                <td><?= $book->isBorrowed() ? 'Yes' : 'No' ?></td>
-                <td><a href="/admin/edit_book/<?=$book->getId()?>">Edit</a></td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-xs-12 col-md-2">
+            <h4>Filters</h4>
+            <form id="bookFilters">
+                <div class="form-group">
+                    <label for="minBorrowDay">Show books borrowed more that following days ago</label>
+                    <input type="number" name="minBorrowDay" id="minBorrowDay" min="0" value="<?= $minDaysBorrowed ?: '' ?>">
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-primary" type="submit" id="bookFilterSubmit" value="Apply filter" disabled>
+                    <input class="btn btn-danger" type="submit" id="bookFilterReset" value="Reset filters">
+                </div>
+            </form>
+        </div>
+        <div class="col-xs-12 col-md-10">
+            <?php if ($minDaysBorrowed > 0) : ?>
+                <h4>Showing books borrowed more than <strong><?= $minDaysBorrowed ?> days</strong> ago</h4>
+            <?php endif; ?>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>ISBN</th>
+                    <th>Borrowed</th>
+                    <th>Borrowed at</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $books = ($minDaysBorrowed > 0) ? $this->getBooksBorrowedMoreThanDays($minDaysBorrowed) : $this->getBooks();
+                foreach ($books as $book): /** @var Book $book */ ?>
+                    <tr>
+                        <td><?= $book->getId() ?></td>
+                        <td><?= $book->getTitle() ?></td>
+                        <td><?= $book->getAuthor() ?></td>
+                        <td><?= $book->getIsbn() ?></td>
+                        <td><?= $book->isBorrowed() ? 'Yes' : 'No' ?></td>
+                        <td><?= $book->getBorrowedAt() ?></td>
+                        <td><a href="/admin/edit_book/<?= $book->getId() ?>">Edit</a></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </section>
 
 <?php require_once(__DIR__ . '/../../common/footer.phtml'); ?>
+
+<script type="application/javascript" src="/js/adminBookFilters.js"></script>
 
