@@ -13,30 +13,58 @@ if ($this->book instanceof Book) {
 
 <section id="new-book-form" class="padded">
     <form class="form-horizontal" method="POST" action="<?= $action ?>">
-        <div class="form-group">
-            <label for="book-title" class="col-sm-1 control-label">Title:</label>
-            <div class="col-sm-10">
-                <input type="text" id="book-title" name="title" class="form-control" value="<?= $title ?? ''?>" required/>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label for="book-title" class="col-sm-1 control-label">Title:</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="book-title" name="title" class="form-control" value="<?= $title ?? '' ?>"
+                               required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="author" class="col-sm-1 control-label">Author:</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="author" name="author" class="form-control" value="<?= $author ?? '' ?>"
+                               required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="isbn" class="col-sm-1 control-label">ISBN:</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="isbn" name="isbn" class="form-control" value="<?= $isbn ?? '' ?>"
+                               required/>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="author" class="col-sm-1 control-label">Author:</label>
-            <div class="col-sm-10">
-                <input type="text" id="author" name="author" class="form-control" value="<?= $author ?? ''?>" required/>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <div class="col-sm-offset-1 col-sm-12">
+                        <button type="submit" class="btn btn-primary">Save book</button>
+                        <button type="button" class="btn btn-default" id="isbnFetch" <?= $isbn ? '' : 'disabled' ?>>
+                            Get book data from OpenLibrary API <i class="fa fa-spinner fa-spin hidden"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="isbn" class="col-sm-1 control-label">ISBN:</label>
-            <div class="col-sm-10">
-                <input type="text" id="isbn" name="isbn" class="form-control" value="<?= $isbn ?? ''?>" required/>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-1 col-sm-2">
-                <button type="submit" class="btn btn-primary">Save book</button>
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="openLibraryData" class="hidden">
+                    <p>Authors: <span id="openLibraryAuthors"></span>
+                    <p>Title: <span id="openLibraryTitle"></span>
+                    <p>Published year: <span id="openLibraryPubYear"></span>
+                    <p><a href="#" id="openLibraryUrl">More info</a>
+                    <p><img id="bookCover" src="">
+                </div>
+                <p><span id="openLibraryError" class="alert alert-danger hidden">Failed to fetch book data from OpenLibrary database</span>
             </div>
         </div>
     </form>
 </section>
 
 <?php require_once(__DIR__ . '/../../common/footer.phtml'); ?>
+
+<script type="application/javascript" src="/js/adminOpenLibrary.js"></script>
