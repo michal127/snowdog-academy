@@ -13,6 +13,7 @@ use Snowdog\Academy\Controller\Login;
 use Snowdog\Academy\Controller\MyBooksList;
 use Snowdog\Academy\Controller\Register;
 use Snowdog\Academy\Menu\ActiveUsersMenu;
+use Snowdog\Academy\Menu\CsvMenu;
 use Snowdog\Academy\Menu\InactiveUsersMenu;
 use Snowdog\Academy\Menu\LoginMenu;
 use Snowdog\Academy\Menu\LogoutMenu;
@@ -38,6 +39,8 @@ RouteRepository::registerRoute('GET', '/admin/edit_book/{id:\d+}', Admin\Books::
 RouteRepository::registerRoute('POST', '/admin/edit_book/{id:\d+}', Admin\Books::class, 'editPost');
 RouteRepository::registerRoute('GET', '/admin/user/list/{isActive:\d+}', Admin\User::class, 'list');
 RouteRepository::registerRoute('GET', '/admin/user/activate/{id:\d+}', Admin\User::class, 'activate');
+RouteRepository::registerRoute('GET', '/admin/csv', Admin\Csv::class, 'index');
+RouteRepository::registerRoute('POST', '/admin/csv/import', Admin\Csv::class, 'import');
 
 Menu::register(LoginMenu::class, 100);
 Menu::register(RegisterMenu::class, 200);
@@ -45,6 +48,7 @@ Menu::register(ActiveUsersMenu::class, 300);
 Menu::register(InactiveUsersMenu::class, 400);
 Menu::register(MyBooksMenu::class, 500);
 Menu::register(LogoutMenu::class, 900);
+Menu::register(CsvMenu::class, 1000);
 
 CommandRepository::registerCommand('test_db_connection', TestDbConnection::class, 'Tests database connection');
 CommandRepository::registerCommand('migrate_db', Migrate::class, 'Performs database migration');

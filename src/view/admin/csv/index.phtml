@@ -1,0 +1,26 @@
+<?php require_once(__DIR__ . '/../../common/header.phtml'); ?>
+
+    <div class="container">
+        <div>
+            <h1>Import book list from CSV file</h1>
+            <div class="padded">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <form action="/admin/csv/import" method="post" enctype="multipart/form-data">
+                            <p><input class="" type="file" name="csvFile">
+                            <p><input class="btn btn-primary" type="submit" value="Import" name="submit">
+                        </form>
+                    </div>
+                </div>
+                <?php if (isset($statusMessage)): ?>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <div class="alert <?= (isset($success) && $success) ? 'alert-info' : 'alert-danger' ?>"><?= $statusMessage ?></div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+<?php require_once(__DIR__ . '/../../common/footer.phtml'); ?>
