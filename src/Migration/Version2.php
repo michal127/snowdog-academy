@@ -40,9 +40,12 @@ SQL;
 
     private function addBooks(): void
     {
-        $this->bookManager->create('Harry Potter and the Chamber of Secrets', 'J. K. Rowling', '9780439064873');
-        $this->bookManager->create('It: A Novel', 'Stephen King', '9781501142970');
-        $this->bookManager->create('The Da Vinci Code', 'Dan Brown', '9780307474278');
-        $this->bookManager->create('Wiedźmin. Ostatnie życzenie', 'Andrzej Sapkowski', '9788375780635');
+        $insertQuery =
+            'INSERT INTO `books` (`title`, `author`, `isbn`) VALUES
+            ("Harry Potter and the Chamber of Secrets", "J. K. Rowling", "9780439064873"), 
+            ("It: A Novel", "Stephen King", "9781501142970"),
+            ("The Da Vinci Code", "Dan Brown", "9780307474278"),
+            ("Wiedźmin. Ostatnie życzenie", "Andrzej Sapkowski", "9788375780635")';
+        $this->database->exec($insertQuery);
     }
 }

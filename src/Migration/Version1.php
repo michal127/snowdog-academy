@@ -40,10 +40,12 @@ SQL;
 
     private function addUsers(): void
     {
-        $this->userManager->create('admin', 'admin', true, true);
-
-        $this->userManager->create('baca', 'zaq12wsx', false, true);
-        $this->userManager->create('maca', 'xsw23edc', false, true);
-        $this->userManager->create('onuca', 'cde34rfv');
+        $insertQuery =
+            'INSERT INTO `users` (`login`, `password`, `is_admin`, `is_active`) VALUES
+            ("admin", SHA2("admin", 512), 1, 1), 
+            ("baca", SHA2("zaq12wsx", 512), 0, 1), 
+            ("maca", SHA2("xsw23edc", 512), 0, 1),
+            ("onuca", SHA2("cde34rfv", 512), 0, 0)';
+        $this->database->exec($insertQuery);
     }
 }
