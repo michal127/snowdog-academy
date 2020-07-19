@@ -84,7 +84,7 @@ class Books extends AdminAbstract
 
     private function getBooks(): array
     {
-        return $this->bookManager->getAllBooksWithBorrowDate();
+        return $this->bookManager->getAllBooks();
     }
 
     private function getBooksBorrowedMoreThanDays(int $days = 0): array

@@ -52,14 +52,7 @@ class BookManager
 
     public function getAllBooks(): array
     {
-        $query = $this->database->query('SELECT * FROM books');
-
-        return $query->fetchAll(Database::FETCH_CLASS, Book::class);
-    }
-
-    public function getAllBooksWithBorrowDate(): array
-    {
-        $query = $this->database->query('SELECT id, title, author, isbn, borrowed, forAdults, borrowed_at FROM books LEFT JOIN borrows ON borrows.book_id = books.id');
+        $query = $this->database->query('SELECT books.*, borrowed_at FROM books LEFT JOIN borrows ON borrows.book_id = books.id');
 
         return $query->fetchAll(Database::FETCH_CLASS, Book::class);
     }
@@ -80,7 +73,7 @@ class BookManager
 
     public function getBooksBorrowedToDate(string $borrowedTo): array
     {
-        $query = $this->database->prepare('SELECT id, title, author, isbn, borrowed, forAdults, borrowed_at FROM books LEFT JOIN borrows ON borrows.book_id = books.id WHERE borrowed = 1 AND borrowed_at < :borrowedTo');
+        $query = $this->database->prepare('SELECT books.*, borrowed_at FROM books LEFT JOIN borrows ON borrows.book_id = books.id WHERE borrowed = 1 AND borrowed_at < :borrowedTo');
         $query->execute([':borrowedTo' => $borrowedTo]);
 
         return $query->fetchAll(Database::FETCH_CLASS, Book::class);
