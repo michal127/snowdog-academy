@@ -39,6 +39,7 @@ if (!isset($minDaysBorrowed)) {
                     <th>ISBN</th>
                     <th>Borrowed</th>
                     <th>Borrowed at</th>
+                    <th>Is for adults</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -52,6 +53,7 @@ if (!isset($minDaysBorrowed)) {
                         <td><?= $book->getIsbn() ?></td>
                         <td><?= $book->isBorrowed() ? 'Yes' : 'No' ?></td>
                         <td><?= $book->getBorrowedAt() ?></td>
+                        <td><?= $book->isForAdults() ? 'Yes' : 'No' ?></td>
                         <td><a href="/admin/edit_book/<?= $book->getId() ?>">Edit</a></td>
                     </tr>
                 <?php endforeach; ?>

@@ -15,6 +15,7 @@ use Snowdog\Academy\Model\User as UserModel; ?>
                 <tr>
                     <th>ID</th>
                     <th>Login</th>
+                    <th>Birthday</th>
                     <?php if (!$this->isActive): ?>
                         <th>Action</th>
                     <?php endif; ?>
@@ -24,6 +25,7 @@ use Snowdog\Academy\Model\User as UserModel; ?>
                     <tr>
                         <td><?= $user->getId() ?></td>
                         <td><?= $user->getLogin() ?></td>
+                        <td><?= $user->getBirthdate() ?></td>
                         <?php if (!$this->isActive): ?>
                             <th><a href="/admin/user/activate/<?= $user->getId() ?>">Activate</a></th>
                         <?php endif; ?>

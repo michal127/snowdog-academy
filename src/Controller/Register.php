@@ -2,6 +2,7 @@
 
 namespace Snowdog\Academy\Controller;
 
+use Snowdog\Academy\Model\User;
 use Snowdog\Academy\Model\UserManager;
 
 class Register
@@ -23,6 +24,7 @@ class Register
         $password = $_POST['password'];
         $confirm = $_POST['confirm'];
         $login = $_POST['login'];
+        $birthdate = $_POST['birthdate'];
 
         if ($password !== $confirm) {
             $_SESSION['flash'] = 'Given passwords do not match';
@@ -30,7 +32,11 @@ class Register
             $_SESSION['flash'] = 'Password cannot be empty!';
         } elseif (empty($login)) {
             $_SESSION['flash'] = 'Login cannot be empty!';
-        } else if ($this->userManager->create($login, $password, false)) {
+        } elseif (empty($birthdate)) {
+            $_SESSION['flash'] = 'Your birthdate cannot be empty!';
+        } elseif ($birthdate > date(User::BIRTHDAY_FORMAT, time())) {
+            $_SESSION['flash'] = 'Your birthdate cannot be date from future!';
+        } else if ($this->userManager->create($login, $password, false, false, $birthdate)) {
             $_SESSION['flash'] = 'Hello ' . $login . '! You will be able to login once your account is activated by an administrator';
             header('Location: /');
             return;

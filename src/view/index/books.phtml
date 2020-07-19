@@ -10,14 +10,16 @@ require_once(__DIR__ . '/../common/header.phtml'); ?>
             <th>Title</th>
             <th>Author</th>
             <th>ISBN</th>
+            <th>For adults</th>
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($this->getBooks() as $book): /** @var Book $book */?>
+        <?php foreach ($this->getBooks() as $book): /** @var Book $book */ ?>
             <tr>
-                <td><?= $book->getTitle()?></td>
-                <td><?= $book->getAuthor()?></td>
-                <td><?= $book->getIsbn()?></td>
+                <td><?= $book->getTitle() ?></td>
+                <td><?= $book->getAuthor() ?></td>
+                <td><?= $book->getIsbn() ?></td>
+                <td><?= $book->isForAdults() ? 'Yes' : 'No' ?></td>
                 <td><a href="/books/borrow/<?= $book->getId() ?>">Borrow</a></td>
             </tr>
         <?php endforeach; ?>

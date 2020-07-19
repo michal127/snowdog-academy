@@ -13,27 +13,29 @@ class BookManager
         $this->database = $database;
     }
 
-    public function create(string $title, string $author, string $isbn): int
+    public function create(string $title, string $author, string $isbn, int $forAdults = 0): int
     {
-        $statement = $this->database->prepare('INSERT INTO books (title, author, isbn) VALUES (:title, :author, :isbn)');
+        $statement = $this->database->prepare('INSERT INTO books (title, author, isbn, forAdults) VALUES (:title, :author, :isbn, :forAdults)');
         $binds = [
             ':title' => $title,
             ':author' => $author,
-            ':isbn' => $isbn
+            ':isbn' => $isbn,
+            ':forAdults' => $forAdults
         ];
         $statement->execute($binds);
 
-        return (int) $this->database->lastInsertId();
+        return (int)$this->database->lastInsertId();
     }
 
-    public function update(int $id, string $title, string $author, string $isbn): void
+    public function update(int $id, string $title, string $author, string $isbn, int $forAdults): void
     {
-        $statement = $this->database->prepare('UPDATE books SET title = :title, author = :author, isbn = :isbn WHERE id = :id');
+        $statement = $this->database->prepare('UPDATE books SET title = :title, author = :author, isbn = :isbn, forAdults = :forAdults WHERE id = :id');
         $binds = [
             ':id' => $id,
             ':title' => $title,
             ':author' => $author,
-            ':isbn' => $isbn
+            ':isbn' => $isbn,
+            ':forAdults' => $forAdults
         ];
 
         $statement->execute($binds);
@@ -57,7 +59,7 @@ class BookManager
 
     public function getAllBooksWithBorrowDate(): array
     {
-        $query = $this->database->query('SELECT id, title, author, isbn, borrowed, borrowed_at FROM books LEFT JOIN borrows ON borrows.book_id = books.id');
+        $query = $this->database->query('SELECT id, title, author, isbn, borrowed, forAdults, borrowed_at FROM books LEFT JOIN borrows ON borrows.book_id = books.id');
 
         return $query->fetchAll(Database::FETCH_CLASS, Book::class);
     }
@@ -69,9 +71,16 @@ class BookManager
         return $query->fetchAll(Database::FETCH_CLASS, Book::class);
     }
 
+    public function getAvailableBooksForChildren(): array
+    {
+        $query = $this->database->query('SELECT * FROM books WHERE borrowed = 0 AND forAdults = 0');
+
+        return $query->fetchAll(Database::FETCH_CLASS, Book::class);
+    }
+
     public function getBooksBorrowedToDate(string $borrowedTo): array
     {
-        $query = $this->database->prepare('SELECT id, title, author, isbn, borrowed, borrowed_at FROM books LEFT JOIN borrows ON borrows.book_id = books.id WHERE borrowed = 1 AND borrowed_at < :borrowedTo');
+        $query = $this->database->prepare('SELECT id, title, author, isbn, borrowed, forAdults, borrowed_at FROM books LEFT JOIN borrows ON borrows.book_id = books.id WHERE borrowed = 1 AND borrowed_at < :borrowedTo');
         $query->execute([':borrowedTo' => $borrowedTo]);
 
         return $query->fetchAll(Database::FETCH_CLASS, Book::class);
